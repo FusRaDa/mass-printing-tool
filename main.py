@@ -6,19 +6,56 @@ from openpyxl import Workbook
 def generate_excel_file():
     warning_title = "File Execution Failed"
 
-    if location.get().__contains__(" ") or len(location.get()) == 0 \
-            or item_number.get().__contains__(" ") or len(item_number.get()) == 0 \
-            or lot.get().__contains__(" ") or len(lot.get()) == 0 \
-            or quantity.get().__contains__(" ") or len(quantity.get()) == 0 \
-            or number_of_labels.get().__contains__(" ") or len(number_of_labels.get()) == 0:
+    location_val = location.get()
+    item_number_val = item_number.get()
+    lot_val = lot.get()
+    quantity_val = quantity.get()
+    number_of_labels_val = number_of_labels.get()
+
+    if location_val.__contains__(" ") or len(location_val) == 0 \
+            or item_number_val.__contains__(" ") or len(item_number_val) == 0 \
+            or lot_val.__contains__(" ") or len(lot_val) == 0 \
+            or quantity_val.__contains__(" ") or len(quantity_val) == 0 \
+            or number_of_labels_val.__contains__(" ") or len(number_of_labels_val) == 0:
         messagebox.showerror(warning_title, "Fill all inputs, values must not contain spaces.")
+        return
+
+    try:
+        float(quantity_val)
+    except ValueError:
+        messagebox.showerror(warning_title, "Quantity must only be a numbers.")
+        return
+
+    try:
+        int(number_of_labels_val)
+    except ValueError:
+        messagebox.showerror(warning_title, "Number of labels must only be a whole number.")
         return
 
     print('executed')
 
+    try:
+        row_data = [location_val, item_number_val, lot_val, quantity_val]
 
+        wb = Workbook()
+        ws = wb.active
 
+        ws['A1'] = "Location"
+        ws['B1'] = "Item #"
+        ws['C1'] = "Lot"
+        ws['D1'] = "Quantity"
 
+        last_cell_row = int(number_of_labels_val)
+        last_cell_col = len(row_data)
+
+        for row in range(2, last_cell_row + 2):
+            for col in range(1, last_cell_col + 1):
+                ws.cell(row=row, column=col).value = row_data[col - 1]
+
+        wb.save("mass_printing_tool_output.xlsx")
+    except PermissionError:
+        messagebox.showerror(warning_title, "Please close out of file before running program again")
+        return
 
 
 # run ui
