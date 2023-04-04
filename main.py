@@ -52,17 +52,18 @@ def generate_excel_file():
             for col in range(1, last_cell_col + 1):
                 ws.cell(row=row, column=col).value = row_data[col - 1]
 
-        wb.save("mass_printing_tool_output.xlsx")
+        wb.save(sys.path[2] + "\\mass_printing_tool_output.xlsx")
     except PermissionError:
         messagebox.showerror(warning_title, "Please close out of file before running program again")
         return
 
-    os.system('start excel.exe "%s\\mass_printing_tool_output.xlsx"' % (sys.path[0]))
+    os.system('start excel.exe "%s\\mass_printing_tool_output.xlsx"' % (sys.path[2]))
+    print(sys.path)
 
 
 # run ui
 window = tk.Tk()
-window.title("Mass Printing Generator")
+window.title("Mass Printing Tool By Chris Rada")
 
 tk.Label(window, text="Location").grid(row=0, column=1)
 tk.Label(window, text="Item #").grid(row=0, column=2)
