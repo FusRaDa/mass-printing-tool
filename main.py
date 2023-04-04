@@ -1,6 +1,8 @@
+import sys
 import tkinter as tk
 from tkinter import messagebox
 from openpyxl import Workbook
+import os
 
 
 def generate_excel_file():
@@ -32,8 +34,6 @@ def generate_excel_file():
         messagebox.showerror(warning_title, "Number of labels must only be a whole number.")
         return
 
-    print('executed')
-
     try:
         row_data = [location_val, item_number_val, lot_val, quantity_val]
 
@@ -56,6 +56,8 @@ def generate_excel_file():
     except PermissionError:
         messagebox.showerror(warning_title, "Please close out of file before running program again")
         return
+
+    os.system('start excel.exe "%s\\mass_printing_tool_output.xlsx"' % (sys.path[0]))
 
 
 # run ui
